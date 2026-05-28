@@ -1,52 +1,51 @@
 package org.example.goit_java_dev_hw_14.service.impl;
 
 import org.example.goit_java_dev_hw_14.entity.Note;
+import org.example.goit_java_dev_hw_14.repository.NoteRepository;
 import org.example.goit_java_dev_hw_14.service.NoteService;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class NoteServiceImpl implements NoteService {
-    private final Map<Long, Note> notes = new HashMap<>();
-    private final AtomicLong idGenerator = new AtomicLong(1);
+
+    private final NoteRepository noteRepository;
+
+    public NoteServiceImpl(NoteRepository noteRepository) {
+        this.noteRepository = noteRepository;
+    }
 
     @Override
     public List<Note> listAll() {
-        return new ArrayList<>(notes.values());
+        return noteRepository.findAll();
     }
 
     @Override
     public Note add(Note note) {
-        long id = idGenerator.getAndIncrement();
-        note.setId(id);
-        notes.put(id, note);
-        return note;
+        return noteRepository.save(note);
     }
 
     @Override
     public void deleteById(long id) {
-        if (!notes.containsKey(id)) {
+        if (!noteRepository.existsById(id)) {
             throw new NoSuchElementException("Note with id " + id + " not found");
         }
-        notes.remove(id);
+        noteRepository.deleteById(id);
     }
 
     @Override
     public void update(Note note) {
-        if (!notes.containsKey(note.getId())) {
+        if (!noteRepository.existsById(note.getId())) {
             throw new NoSuchElementException("Note with id " + note.getId() + " not found");
         }
-        notes.put(note.getId(), note);
+        noteRepository.save(note);
     }
 
     @Override
     public Note getById(long id) {
-        Note note = notes.get(id);
-        if (note == null) {
-            throw new NoSuchElementException("Note with id " + id + " not found");
-        }
-        return note;
+        return noteRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Note with id " + id + " not found"));
     }
 }
