@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная — Управление Заметками</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            padding: 50px;
+            text-align: center;
+        }
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: inline-block;
+            max-width: 500px;
+        }
+        h1 { color: #333; }
+        .btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .btn:hover { background-color: #0056b3; }
+        .logout-form { margin-top: 30px; }
+        .btn-logout {
+            background-color: #dc3545;
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-logout:hover { background-color: #bd2130; }
+        .user-info { color: #666; font-style: italic; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Добро пожаловать в приложение Заметки!</h1>
+
+    <p class="user-info">Вы вошли как: <strong sec:authentication="name">Имя пользователя</strong></p>
+
+    <p>Ваша система авторизации работает успешно. Теперь вы можете перейти к управлению своими записями.</p>
+
+    <a th:href="@{/note/list}" class="btn">Открыть список заметок</a>
+
+    <form class="logout-form" th:action="@{/logout}" method="post">
+        <button type="submit" class="btn-logout">Выйти из аккаунта</button>
+    </form>
+</div>
+
+</body>
+</html>
